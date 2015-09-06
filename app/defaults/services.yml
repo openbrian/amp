@@ -32,6 +32,8 @@ parameters:
 
   instances_timeout: 5
 
+  with_apache_rewrite: true
+
 services:
   ## Data storage for AMP instances
   instances:
@@ -100,6 +102,7 @@ services:
       - [setDir, ['%apache_dir%']]
       - [setLogDir, ['%log_dir%']]
       - [setPerm, ['@perm']]
+      - [setRewrite, ['%with_apache_rewrite%']]
 
   httpd.apache24:
     class: Amp\Httpd\VhostTemplate
@@ -109,6 +112,7 @@ services:
       - [setDir, ['%apache_dir%']]
       - [setLogDir, ['%log_dir%']]
       - [setPerm, ['@perm']]
+      - [setRewrite, ['%with_apache_rewrite%']]
 
   httpd.nginx:
     class: Amp\Httpd\VhostTemplate

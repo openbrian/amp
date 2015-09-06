@@ -57,6 +57,7 @@ class ConfigRepository {
       'ram_disk_dir' => 'Directory to create as a RAM disk',
       'ram_disk_size' => 'Amount of space to allocate for ramdisk (MB)',
       'ram_disk_type' => 'Type of RAM disk [auto,linux,osx]',
+      'with_rewrite' => 'Enable mod_rewrite in Apache',
     );
 
     // FIXME externalize

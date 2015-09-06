@@ -26,6 +26,11 @@ class VhostTemplate implements HttpdInterface {
   private $perm;
 
   /**
+   * @var boolean
+   */
+  private $withRewrite;
+
+  /**
    * @var string, name of the template file
    */
   private $template;
@@ -59,11 +64,21 @@ class VhostTemplate implements HttpdInterface {
     $this->fs->dumpFile($this->createFilePath($root, $url), $content);
 
     $this->setupLogDir();
+
+    if ($this->withRewrite && php_uname('s') == 'Linux') {
+      $distro = trim(explode( ':', exec('lsb_release -i'))[1]);
+      if (in_array($distro, array( 'Debian', 'Ubuntu' ))) {
+        $this->enableModRewrite(); 
+      }
   }
 
   public function setupLogDir() {
     $this->fs->mkdir($this->getLogDir());
     $this->getPerm()->applyDirPermission(PermissionInterface::WEB_WRITE, $this->getLogDir());
+  }
+
+  public function enableModRewrite() {
+    exec( 'a2enmod rewrite' );
   }
 
   /**
@@ -128,6 +143,20 @@ class VhostTemplate implements HttpdInterface {
    */
   public function getPerm() {
     return $this->perm;
+  }
+
+  /**
+   * @param boolean $withRewrite
+   */
+  public function setWithRewrite($withRewrite) {
+    $this->withRewrite = $withRewrite;
+  }
+
+  /**
+   * @return boolean
+   */
+  public function getWithRewrite() {
+    return $this->withRewrite;
   }
 
   /**
